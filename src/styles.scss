@@ -18,4 +18,14 @@ body {
     border-radius: 10px;
     margin-bottom: 1rem;
 }
-    
+.invalid-feedback {
+    color: red;
+    font-weight: bold;
+    font-size: 11px;
+    // animation: shake 300ms;
+  }
+  .valid-feedback {
+    color:green;
+    font-weight: bold;
+    font-size: 11px;
+  }

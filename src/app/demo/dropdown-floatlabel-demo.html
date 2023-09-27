@@ -1,4 +1,413 @@
-<div class="col-12">
+<p-fieldset legend="SSC/O-Level/Equiv" [toggleable]="true">
+  <div class="col-12">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="p-fluid p-formgrid grid">
+          <div class="field col-12 md:col-6">
+            <label for="degreeType">Degree <span 
+              [ngClass]="f['educationType'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+            </label>
+            <p-dropdown
+              id="educationType"
+              placeholder="Select degree type"
+              formControlName="educationType"
+              optionLabel="label"
+              optionValue="value"
+              [showClear]="true"
+              [options]="educationTypeOptions"
+              (onChange)="onDropdownChange($event)"
+            ></p-dropdown>
+            <div *ngIf="f['educationType'].errors && (f['educationType'].touched || f['educationType'].dirty)"
+                class="invalid-feedback">
+                <div *ngIf="f['educationType'].errors['required']">Degree is required</div>
+            </div>
+          </div>
+          <div class="field col-12 md:col-6" *ngIf="selectedOption === 'olevel'">
+            <label for="applyingfor">Applying For <span 
+              [ngClass]="f['managementType'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+            </label>
+            <p-dropdown
+              id="managementType"
+              placeholder="Select level type"
+              formControlName="managementType"
+              optionLabel="label"
+              optionValue="value"
+              [showClear]="true"
+              [options]="managementTypeOptions"
+              (onChange)="onLeveltypeChange($event)"
+            ></p-dropdown>
+            <div *ngIf="f['managementType'].errors && (f['managementType'].touched || f['managementType'].dirty)"
+                class="invalid-feedback">
+                <div *ngIf="f['managementType'].errors['required']">Applying For is required</div>
+              </div>
+          </div>
+          <div
+            class="field col-12 md:col-12"
+            *ngIf="form.get('managementType')?.value === 'management'"
+          >
+            <div class="p-fluid p-formgrid grid p2">
+              <div class="field col-12 md:col-9">
+                <label htmlFor="subjectname">Subject Name :</label>
+              </div>
+              <div class="field col-12 md:col-3">
+                <label htmlFor="subjectname">Subject Grade :</label>
+              </div>
+            </div>
+            <div
+              class="p-fluid p-formgrid grid p2"
+              *ngFor="let subjectPair of subjectPairs; let i = index"
+              [formGroup]="subjectPair"
+            >
+              <!-- <pre>{{ subjectPair.value | json }}</pre> -->
+  
+              <div class="field col-12 md:col-9">
+                <p-dropdown
+                  placeholder="Select subject name"
+                  formControlName="subject"
+                  [filter]="true"
+                  optionLabel="title"
+                  optionValue="title"
+                  [options]="subjectOptions"
+                ></p-dropdown>   
+                <div *ngIf="subjectPair.get('subject')?.errors && (subjectPair.get('subject')?.touched || subjectPair.get('subject')?.dirty)"
+                    class="invalid-feedback">
+                  <div *ngIf="subjectPair.get('subject')?.hasError('required')">Subject is required</div>
+                </div>
+              </div>
+              <div class="field col-12 md:col-3">
+                <p-dropdown
+                  placeholder="Select grade"
+                  formControlName="subjectGrade"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="subjectGradeOptions"
+                ></p-dropdown>
+                <div *ngIf="subjectPair.get('subjectGrade')?.errors && (subjectPair.get('subjectGrade')?.touched || subjectPair.get('subjectGrade')?.dirty)"
+                    class="invalid-feedback">
+                  <div *ngIf="subjectPair.get('subjectGrade')?.hasError('required')">Subject Grade is required</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="field col-12 md:col-12"
+            *ngIf="form.get('managementType')?.value === 'all'"
+          >
+            <div class="field col-12 md:col-6">
+              <label for="applyFrom">Applying From <span 
+                [ngClass]="f['applyFrom'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+              </label>
+              <p-dropdown
+                placeholder="Select apply from"
+                formControlName="applyFrom"
+                optionLabel="label"
+                optionValue="value"
+                [options]="applyFromOptions"
+                (onChange)="onApplyFromChange($event)"
+              ></p-dropdown>
+              <div *ngIf="f['applyFrom'].errors && (f['applyFrom'].touched || f['applyFrom'].dirty)"
+                class="invalid-feedback">
+                <div *ngIf="f['applyFrom'].errors['required']">Applying From is required</div>
+              </div>
+            </div>
+            <div
+              class="field col-12 md:col-12"
+              *ngIf="selectedApplyFromOption === 'pak'"
+            >
+              <div class="p-fluid p-formgrid grid p2">
+                <div class="field col-12 md:col-9">
+                  <label htmlFor="subjectname">Subject Name :</label>
+                </div>
+                <div class="field col-12 md:col-3">
+                  <label htmlFor="subjectname">Subject Grade :</label>
+                </div>
+              </div>
+              <div
+                class="p-fluid p-formgrid grid p2"
+                *ngFor="let subjectPair of subjectPairs; let i = index"
+                [formGroup]="subjectPair"
+              >
+                <div class="field col-12 md:col-9">
+                  <input
+                    type="text"
+                    pInputText
+                    [ngStyle]="selectedApplyFromOption === 'pak' ? {'pointer-events': 'none'} : {'pointer-events': 'all'}"
+                    placeholder="Select subject name"
+                    formControlName="subject"
+                  />
+                  <div *ngIf="subjectPair.get('subject')?.errors && (subjectPair.get('subject')?.touched || subjectPair.get('subject')?.dirty)"
+                    class="invalid-feedback">
+                  <div *ngIf="subjectPair.get('subject')?.hasError('required')">Subject is required</div>
+                </div>
+                </div>
+                <div class="field col-12 md:col-3">
+                  <p-dropdown
+                    placeholder="Select grade"
+                    formControlName="subjectGrade"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="subjectGradeOptions"
+                  ></p-dropdown>
+                  <div *ngIf="subjectPair.get('subjectGrade')?.errors && (subjectPair.get('subjectGrade')?.touched || subjectPair.get('subjectGrade')?.dirty)"
+                    class="invalid-feedback">
+                  <div *ngIf="subjectPair.get('subjectGrade')?.hasError('required')">Subject Grade is required</div>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="field col-12 md:col-12"
+              *ngIf="selectedApplyFromOption === 'overseas'|| selectedApplyFromOption === 'covid'"
+            >
+              <div class="p-fluid p-formgrid grid p2">
+                <div class="field col-12 md:col-9">
+                  <label htmlFor="subjectname">Subject Name :</label>
+                </div>
+                <div class="field col-12 md:col-3">
+                  <label htmlFor="subjectname">Subject Grade :</label>
+                </div>
+              </div>
+              <div
+                class="p-fluid p-formgrid grid p2"
+                *ngFor="let subjectPair of subjectPairs; let i = index"
+                [formGroup]="subjectPair"
+              >
+                <div class="field col-12 md:col-9" *ngIf=" i < 5">
+                  <input
+                    type="text"
+                    pInputText
+                    [ngStyle]="(selectedApplyFromOption === 'overseas'|| selectedApplyFromOption === 'covid') ? {'pointer-events': 'none'} : {'pointer-events': 'all'}"
+                    placeholder="Select subject name"
+                    formControlName="subject"
+                  />
+                  <div *ngIf="subjectPair.get('subject')?.errors && (subjectPair.get('subject')?.touched || subjectPair.get('subject')?.dirty)"
+                    class="invalid-feedback">
+                  <div *ngIf="subjectPair.get('subject')?.hasError('required')">Subject is required</div>
+                </div>
+                </div>
+                <div class="field col-12 md:col-9" *ngIf=" i >= 5">
+                  <p-dropdown
+                    placeholder="Select subject name"
+                    formControlName="subject"
+                    [filter]="true"
+                    optionLabel="title"
+                    optionValue="title"
+                    [options]="subjectOptions"
+                  ></p-dropdown>
+                  <div *ngIf="subjectPair.get('subject')?.errors && (subjectPair.get('subject')?.touched || subjectPair.get('subject')?.dirty)"
+                    class="invalid-feedback">
+                  <div *ngIf="subjectPair.get('subject')?.hasError('required')">Subject is required</div>
+                </div>
+                </div>
+                <div class="field col-12 md:col-3">
+                  <p-dropdown
+                    placeholder="Select subject grade"
+                    formControlName="subjectGrade"
+                    optionLabel="label"
+                    optionValue="value"
+                    [options]="subjectGradeOptions"
+                  ></p-dropdown>
+                  <div *ngIf="subjectPair.get('subjectGrade')?.errors && (subjectPair.get('subjectGrade')?.touched || subjectPair.get('subjectGrade')?.dirty)"
+                    class="invalid-feedback">
+                  <div *ngIf="subjectPair.get('subjectGrade')?.hasError('required')">Subject Grade is required</div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field col-12 md:col-12">
+            <div
+              class="p-fluid p-formgrid grid p2"
+              *ngIf="selectedOption === 'matric'"
+            >
+              <div class="field col-12 md:col-4">
+                <label for="boardname">Board Name <span 
+                  [ngClass]="f['boardName'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+                </label>
+                <div class="w-full">
+                  
+                </div>
+                <p-dropdown
+                  id="boardNameType"
+                  placeholder="Select board name"
+                  formControlName="boardName"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="boardNameOptions"
+                ></p-dropdown>
+                <div *ngIf="f['boardName'].errors && (f['boardName'].touched || f['boardName'].dirty)"
+                class="invalid-feedback">
+                  <div *ngIf="f['boardName'].errors['required']">Board Name is required</div>
+                </div>
+              </div>
+              <div class="field col-12 md:col-4">
+                <label for="groupname">Group Name <span 
+                  [ngClass]="f['groupName'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+                </label>
+                <p-dropdown
+                  id="groupNameType"
+                  placeholder="Select group type"
+                  formControlName="groupName"
+                  optionLabel="label"
+                  optionValue="value"
+                  [options]="groupNameOptions"
+                ></p-dropdown>
+                <div *ngIf="f['groupName'].errors && (f['groupName'].touched || f['groupName'].dirty)"
+                  class="invalid-feedback">
+                  <div *ngIf="f['groupName'].errors['required']">Group Name is required</div>
+                </div>
+              </div>
+              <div class="field col-12 md:col-4">
+                <label for="marks">Obtained Marks <span 
+                  [ngClass]="f['obtainedMarks'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+                </label>
+                <p-inputNumber
+                  mode="decimal"
+                  placeholder="marks"
+                  [min]="0"
+                  [max]="100000"
+                  formControlName="obtainedMarks"
+                ></p-inputNumber>
+                <div *ngIf="f['obtainedMarks'].errors && (f['obtainedMarks'].touched || f['obtainedMarks'].dirty)"
+                  class="invalid-feedback">
+                  <div *ngIf="f['obtainedMarks'].errors['required']">Obtained Marks is required</div>
+                  <div *ngIf="f['obtainedMarks'].errors['maxlength']">Max. Length does not exceeded 5 digits</div>
+                </div>
+                <div *ngIf="form.hasError('marksMismatch') && (form.get('obtainedMarks').dirty || form.get('totalMarks').dirty)"
+                    class="invalid-feedback">
+                    Obtained Marks must be less than or equal to Total Marks.
+                </div>
+              </div>
+              <div class="field col-12 md:col-4">
+                <label for="totalMarks">Total Marks <span 
+                  [ngClass]="f['totalMarks'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+                </label>
+                <p-inputNumber
+                  mode="decimal"
+                  placeholder="total"
+                  [min]="0"
+                  [max]="100000"
+                  formControlName="totalMarks"
+                ></p-inputNumber>
+                <div *ngIf="f['totalMarks'].errors && (f['totalMarks'].touched || f['totalMarks'].dirty)"
+                class="invalid-feedback">
+                  <div *ngIf="f['totalMarks'].errors['required']">Total Marks is required</div>
+                  <div *ngIf="f['totalMarks'].errors['maxlength']">Max. Length does not exceeded 5 digits</div>
+                </div>
+                <div *ngIf="form.hasError('marksMismatch') && (form.get('obtainedMarks').dirty || form.get('totalMarks').dirty)"
+                    class="invalid-feedback">
+                  Total Marks must be greater than or equal to Obtained Marks.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="field col-12 md:col-12">
+            <div
+              class="p-fluid p-formgrid grid p2"
+              *ngIf="selectedOption === 'american'"
+            >
+              <div class="field col-12 md:col-4">
+                <label for="awardingInstitute">Awarding Institution <span 
+                  [ngClass]="f['awardingInstitution'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+                </label>
+                <input
+                  type="text"
+                  pInputText
+                  placeholder="institution"
+                  formControlName="awardingInstitution"
+                />
+                <div *ngIf="f['awardingInstitution'].errors && (f['awardingInstitution'].touched || f['awardingInstitution'].dirty)"
+                  class="invalid-feedback">
+                  <div *ngIf="f['awardingInstitution'].errors['required']">Awarding Institution is required</div>
+                </div>
+              </div>
+              <div class="field col-12 md:col-4">      
+                <label for="obtainedMarksGrd910">Obtained Marks (Grd 9 + 10) <span 
+                  [ngClass]="f['obtainedMarksGrd9And10'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+                </label>
+                <p-inputNumber
+                  mode="decimal"
+                  [min]="0"
+                  placeholder="obtainedMarks"
+                  formControlName="obtainedMarksGrd9And10"
+                  (keypress)="validateMarks('obtainedMarksGrd9And10', 'totalMarksGrd9And10')"
+                ></p-inputNumber>
+                <div *ngIf="f['obtainedMarksGrd9And10'].errors && (f['obtainedMarksGrd9And10'].touched || f['obtainedMarksGrd9And10'].dirty)"
+                  class="invalid-feedback">
+                  <div *ngIf="f['obtainedMarksGrd9And10'].errors['required']">Obtained Marks (Grd 9 +10) is required</div>
+                </div>
+                <div *ngIf="f['obtainedMarksGrd9And10'].errors && (f['obtainedMarksGrd9And10'].touched || f['obtainedMarksGrd9And10'].dirty)"
+                    class="invalid-feedback">
+                  Total Marks must be greater than or equal to Obtained Marks.
+                </div>
+              </div>
+              <div class="field col-12 md:col-4">
+                <label for="totalMarksGrd9And10">Total Marks (Grd 9 +10) <span 
+                  [ngClass]="f['totalMarksGrd9And10'].errors ? 'invalid-feedback' : 'valid-feedback'">*</span>
+                </label>
+                <p-inputNumber
+                  mode="decimal"
+                  [min]="0"
+                  placeholder="totalMarks"
+                  formControlName="totalMarksGrd9And10"
+                  (keypress)="validateMarks('obtainedMarksGrd9And10', 'totalMarksGrd9And10')"
+                ></p-inputNumber>
+                <div *ngIf="f['totalMarksGrd9And10'].errors && (f['totalMarksGrd9And10'].touched || f['totalMarksGrd9And10'].dirty)"
+                  class="invalid-feedback">
+                  <div *ngIf="f['totalMarksGrd9And10'].errors['required']">Total Marks (Grd 9 +10) is required</div>
+                </div>
+                <div *ngIf="f['obtainedMarksGrd9And10'].errors && (f['obtainedMarksGrd9And10'].touched || f['obtainedMarksGrd9And10'].dirty)"
+                    class="invalid-feedback">
+                  Total Marks must be greater than or equal to Obtained Marks.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field col-12 md:col-12 text-right">
+          <p-button label="Save & Next" icon="pi pi-save"  type="submit"
+            [disabled]="form.invalid"></p-button>
+        </div>
+      </form>
+  </div>
+</p-fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="col-12">
   <div class="card">
     <h5>Educational Record</h5>
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -46,10 +455,7 @@
             *ngFor="let subjectPair of subjectPairs; let i = index"
             [formGroup]="subjectPair"
           >
-            <!-- <pre>{{ subjectPair.value | json }}</pre> -->
-
             <div class="field col-12 md:col-9">
-              <!-- <label htmlFor="subjectname">Subject Name :</label> -->
               <p-dropdown
                 placeholder="Select subject name"
                 formControlName="subject"
@@ -58,19 +464,8 @@
                 optionValue="title"
                 [options]="subjectOptions"
               ></p-dropdown>
-              <!-- <label htmlFor="subjectname">Subject Name :</label>
-              <p-dropdown
-                id="subject"
-                placeholder="Select subject name"
-                formControlName="subject"
-                [filter]="true"
-                optionLabel="title"
-                optionValue="title"
-                [options]="subjectOptions"
-              ></p-dropdown> -->
             </div>
             <div class="field col-12 md:col-3">
-              <!-- <label htmlFor="grade">Subject Grade :</label> -->
               <p-dropdown
                 placeholder="Select subject grade"
                 formControlName="subjectGrade"
@@ -78,15 +473,6 @@
                 optionValue="value"
                 [options]="subjectGradeOptions"
               ></p-dropdown>
-              <!-- <label htmlFor="grade">Subject Grade :</label>
-              <p-dropdown
-                id="grade"
-                placeholder="Select subject grade"
-                formControlName="subjectGrade"
-                optionLabel="label"
-                optionValue="value"
-                [options]="subjectGradeOptions"
-              ></p-dropdown> -->
             </div>
           </div>
         </div>
@@ -287,4 +673,4 @@
       </div>
     </form>
   </div>
-</div>
+</div> -->
