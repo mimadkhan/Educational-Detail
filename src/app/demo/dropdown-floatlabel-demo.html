@@ -335,10 +335,15 @@
                   class="invalid-feedback">
                   <div *ngIf="f['obtainedMarksGrd9And10'].errors['required']">Obtained Marks (Grd 9 +10) is required</div>
                 </div>
-                <div *ngIf="f['obtainedMarksGrd9And10'].errors && (f['obtainedMarksGrd9And10'].touched || f['obtainedMarksGrd9And10'].dirty)"
+                <div *ngIf="form.hasError('marksMismatch') && (form.get('obtainedMarksGrd9And10').dirty || form.get('totalMarksGrd9And10').dirty)"
                     class="invalid-feedback">
-                  Total Marks must be greater than or equal to Obtained Marks.
+                    Obtained Marks must be less than or equal to Total Marks.
                 </div>
+                <!-- <div *ngIf="f['obtainedMarksGrd9And10'].errors && (f['obtainedMarksGrd9And10'].touched || f['obtainedMarksGrd9And10'].dirty)
+                            || f['totalMarksGrd9And10'].errors && (f['totalMarksGrd9And10'].touched || f['totalMarksGrd9And10'].dirty)"
+                    class="invalid-feedback">
+                    Obtained Marks must be less than or equal to Total Marks.
+                </div> -->
               </div>
               <div class="field col-12 md:col-4">
                 <label for="totalMarksGrd9And10">Total Marks (Grd 9 +10) <span 
@@ -355,10 +360,15 @@
                   class="invalid-feedback">
                   <div *ngIf="f['totalMarksGrd9And10'].errors['required']">Total Marks (Grd 9 +10) is required</div>
                 </div>
-                <div *ngIf="f['obtainedMarksGrd9And10'].errors && (f['obtainedMarksGrd9And10'].touched || f['obtainedMarksGrd9And10'].dirty)"
+                <div *ngIf="form.hasError('marksMismatch') && (form.get('obtainedMarksGrd9And10').dirty || form.get('totalMarksGrd9And10').dirty)"
                     class="invalid-feedback">
                   Total Marks must be greater than or equal to Obtained Marks.
                 </div>
+                <!-- <div *ngIf="f['totalMarksGrd9And10'].errors && (f['totalMarksGrd9And10'].touched || f['totalMarksGrd9And10'].dirty)
+                            || f['obtainedMarksGrd9And10'].errors && (f['obtainedMarksGrd9And10'].touched || f['obtainedMarksGrd9And10'].dirty)"
+                    class="invalid-feedback">
+                  Total Marks must be greater than or equal to Obtained Marks.
+                </div> -->
               </div>
             </div>
           </div>

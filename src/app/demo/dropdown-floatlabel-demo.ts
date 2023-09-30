@@ -287,39 +287,37 @@ export class DropdownFloatlabelDemo implements OnInit {
     marksValidator(): ValidatorFn {
       return (control: AbstractControl): ValidationErrors | null => {
         debugger
-        const obtainedMarks = control.get('obtainedMarks').value;
-        const totalMarks = control.get('totalMarks').value;
-
-        if (obtainedMarks > totalMarks) {
-          return { marksMismatch: true };
-        }   
-        return null;
-      };
-    }
-
-    marksGrd9And10Validator(): ValidatorFn {
-      return (control: AbstractControl): ValidationErrors | null => {
-        debugger
-        const obtainedMarksGrd9And10 = control.get('obtainedMarksGrd9And10').value;
-        const totalMarksGrd9And10 = control.get('totalMarksGrd9And10').value;
-    
-        if(obtainedMarksGrd9And10 > totalMarksGrd9And10) {
-          return { marksGrd9And10Mismatch: true };
-        }    
-        return null;
+        const type = control.get('educationType').value;
+        if(type === 'matric'){
+          const obtainedMarks = control.get('obtainedMarks').value;
+          const totalMarks = control.get('totalMarks').value;
+          
+          if (obtainedMarks > totalMarks) {
+            return { marksMismatch: true };
+          }   
+          return null;
+        } else {
+          const obtainedMarksControl = control.get('obtainedMarksGrd9And10').value;;
+          const totalMarksControl = control.get('totalMarksGrd9And10').value;
+      
+          if (obtainedMarksControl > totalMarksControl) {
+            return { marksMismatch: true };
+          } 
+          return null;
+        }
       };
     }
 
     validateMarks(obtainedMarksControlName: string, totalMarksControlName: string): void {
-      debugger
-      const obtainedMarksControl = this.form.get(obtainedMarksControlName);
-      const totalMarksControl = this.form.get(totalMarksControlName);
+      // debugger
+      // const obtainedMarksControl = this.form.get(obtainedMarksControlName);
+      // const totalMarksControl = this.form.get(totalMarksControlName);
   
-      if (obtainedMarksControl.value > totalMarksControl.value) {
-        obtainedMarksControl.setErrors({ marksMismatch: true });
-      } else {
-        obtainedMarksControl.setErrors(null);
-      }
+      // if (obtainedMarksControl.value > totalMarksControl.value) {
+      //   obtainedMarksControl.setErrors({ marksMismatch: true });
+      // } else {
+      //   obtainedMarksControl.setErrors(null);
+      // }
     }
 
 
